@@ -1,6 +1,6 @@
 forge init --force;
 
-forge install vectorized/solady --shallow --force;
+forge install vectorized/solady --shallow;
 
 mkdir test/utils;
 cp lib/solady/test/utils/TestPlus.sol test/utils/TestPlus.sol;
