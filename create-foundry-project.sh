@@ -1,12 +1,17 @@
+if [ "$(ls -A .)" ]; then
+  echo "Directory must be empty for the create Foundry project script to run. It is unsafe to run this script on a non-empty directory."
+  exit 1
+fi
+
 forge init --force;
 
 forge install vectorized/solady --shallow;
 
-rm -rf .github;
-mkdir .github;
+mkdir -p .github;
 cp lib/solady/.github/issue_template.md .github/issue_template.md;
 cp lib/solady/.github/pull_request_template.md .github/pull_request_template.md;
-mkdir .github/workflows;
+mkdir -p .github/workflows;
+rm .github/workflows/test.yml;
 
 echo "name: ci
 
@@ -68,7 +73,6 @@ jobs:
           ignore_words_list: usera
           skip: ./.git,package-lock.json,ackee-blockchain-solady-report.pdf,EIP712Mock.sol
 " > .github/workflows/ci.yml;
-
 
 echo "name: ci
 
