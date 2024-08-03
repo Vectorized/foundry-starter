@@ -28,7 +28,7 @@ contract SoladyTest is Test, TestPlus {
 echo "// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.4;
 
-import \"./SoladyTest.sol\";
+import \"./utils/SoladyTest.sol\";
 import {Counter} from \"../src/Counter.sol\";
 
 contract CounterTest is SoladyTest {
