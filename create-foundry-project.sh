@@ -1,6 +1,6 @@
 forge init --force;
 
-forge install vectorized/solady;
+forge install vectorized/solady --shallow --force;
 
 mkdir test/utils;
 cp lib/solady/test/utils/TestPlus.sol test/utils/TestPlus.sol;
@@ -24,6 +24,22 @@ contract SoladyTest is Test, TestPlus {
         return _hem(x, min, max);
     }
 }" > test/utils/SoladyTest.sol;
+
+echo "// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.4;
+
+contract Counter {
+    uint256 public number;
+
+    function setNumber(uint256 newNumber) public {
+        number = newNumber;
+    }
+
+    function increment() public {
+        number++;
+    }
+}
+" > src/Counter.sol;
 
 echo "// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.4;
@@ -113,3 +129,4 @@ wake-coverage.cov
 " > .gitignore;
 
 forge fmt;
+forge test;
