@@ -199,22 +199,7 @@ jobs:
         run: FOUNDRY_INVARIANT_RUNS=500 FOUNDRY_INVARIANT_DEPTH=500 forge test
 " > .github/workflows/ci-invariant-intense.yml;
 
-mkdir test/utils;
-cp lib/solady/test/utils/TestPlus.sol test/utils/TestPlus.sol;
-cp lib/solady/test/utils/Brutalizer.sol test/utils/Brutalizer.sol;
-
-echo "// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
-
-import \"forge-std/Test.sol\";
-import \"./TestPlus.sol\";
-
-contract SoladyTest is Test, TestPlus {
-    /// @dev Alias for \`_hem\`.
-    function _bound(uint256 x, uint256 min, uint256 max) internal pure virtual override returns (uint256) {
-        return _hem(x, min, max);
-    }
-}" > test/utils/SoladyTest.sol;
+curl -s https://raw.githubusercontent.com/Vectorized/foundry-starter/main/install-solady-test.sh | bash;
 
 echo "// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.4;
