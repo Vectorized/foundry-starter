@@ -2,6 +2,199 @@ forge init --force;
 
 forge install vectorized/solady --shallow;
 
+rm -rf .github;
+mkdir .github;
+cp lib/solady/.github/issue_template.md .github/issue_template.md;
+cp lib/solady/.github/pull_request_template.md .github/pull_request_template.md;
+mkdir .github/workflows;
+
+echo "name: ci
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.sol'
+      - '**.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**.sol'
+      - '**.yml'
+jobs:
+  tests:
+    name: Forge Testing
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        profile: [regular,intense]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Dependencies
+        run: forge install
+
+      - name: Run Tests with \${{ matrix.profile }}
+        run: >
+          ( [ \"\${{ matrix.profile }}\" = \"regular\" ] &&
+            forge test
+          ) ||
+          ( [ \"\${{ matrix.profile }}\" = \"intense\" ] &&
+            forge test --fuzz-runs 10000
+          )
+
+  codespell:
+    runs-on: \${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run codespell
+        uses: codespell-project/actions-codespell@v2.0
+        with:
+          check_filenames: true
+          ignore_words_list: usera
+          skip: ./.git,package-lock.json,ackee-blockchain-solady-report.pdf,EIP712Mock.sol
+" > .github/workflows/ci.yml;
+
+
+echo "name: ci
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.sol'
+      - '**.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**.sol'
+      - '**.yml'
+jobs:
+  tests:
+    name: Forge Testing
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        profile: [regular,intense]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Dependencies
+        run: forge install
+
+      - name: Run Tests with \${{ matrix.profile }}
+        run: >
+          ( [ \"\${{ matrix.profile }}\" = \"regular\" ] &&
+            forge test
+          ) ||
+          ( [ \"\${{ matrix.profile }}\" = \"intense\" ] &&
+            forge test --fuzz-runs 5000
+          )
+
+  codespell:
+    runs-on: \${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run codespell
+        uses: codespell-project/actions-codespell@v2.0
+        with:
+          check_filenames: true
+          ignore_words_list: usera
+          skip: ./.git,package-lock.json,ackee-blockchain-solady-report.pdf,EIP712Mock.sol
+" > .github/workflows/ci.yml;
+
+echo "name: ci-super-intense
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Forge Testing super intense
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        profile: [super-intense-0,super-intense-1]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Dependencies
+        run: forge install
+
+      - name: Run Tests with \${{ matrix.profile }}
+        run: >
+          ( [ \"\${{ matrix.profile }}\" = \"super-intense-0\" ] &&
+            forge test --fuzz-runs 20000
+          ) ||
+          ( [ \"\${{ matrix.profile }}\" = \"super-intense-1\" ] &&
+            forge test --fuzz-runs 200000
+          )
+" > .github/workflows/ci-super-intense.yml;
+
+echo "name: ci-invariant-intense
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Forge Testing invariant intense
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        profile: [invariant-intense-0,invariant-intense-1,invariant-intense-2,invariant-intense-3]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Dependencies
+        run: forge install
+
+      - name: Run Tests with \${{ matrix.profile }}
+        run: FOUNDRY_INVARIANT_RUNS=500 FOUNDRY_INVARIANT_DEPTH=500 forge test
+" > .github/workflows/ci-invariant-intense.yml;
+
 mkdir test/utils;
 cp lib/solady/test/utils/TestPlus.sol test/utils/TestPlus.sol;
 cp lib/solady/test/utils/Brutalizer.sol test/utils/Brutalizer.sol;
