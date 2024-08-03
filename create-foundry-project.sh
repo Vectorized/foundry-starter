@@ -67,6 +67,27 @@ contract CounterTest is SoladyTest {
 }
 " > test/Counter.t.sol;
 
+echo "// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.4;
+
+import {Script, console} from \"forge-std/Script.sol\";
+import {Counter} from \"../src/Counter.sol\";
+
+contract CounterScript is Script {
+    Counter public counter;
+
+    function setUp() public {}
+
+    function run() public {
+        vm.startBroadcast();
+
+        counter = new Counter();
+
+        vm.stopBroadcast();
+    }
+}
+" > script/Counter.s.sol;
+
 echo "# Foundry Configuration File
 # Default definitions: https://github.com/gakonst/foundry/blob/b7917fa8491aedda4dd6db53fbb206ea233cd531/config/src/lib.rs#L782
 # See more config options at: https://github.com/gakonst/foundry/tree/master/config
@@ -129,4 +150,3 @@ wake-coverage.cov
 " > .gitignore;
 
 forge fmt;
-forge test;
